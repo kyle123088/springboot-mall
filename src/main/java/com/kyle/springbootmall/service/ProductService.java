@@ -1,6 +1,6 @@
 package com.kyle.springbootmall.service;
 
-import com.kyle.springbootmall.constant.ProductCategory;
+import com.kyle.springbootmall.dto.ProductQueryParams;
 import com.kyle.springbootmall.dto.ProductRequest;
 import com.kyle.springbootmall.model.Product;
 
@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ProductService {
 
-    List<Product> getProducts(ProductCategory category, String search);
+    List<Product> getProducts(ProductQueryParams productQueryParams);
 
     Product getProductById(Integer productId);
 
