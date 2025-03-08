@@ -6,21 +6,23 @@ import com.kyle.springbootmall.dto.ProductRequest;
 import com.kyle.springbootmall.model.Product;
 import com.kyle.springbootmall.service.ProductService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Validated
 @RestController
 public class ProductController {
 
     @Autowired
     private ProductService productService;
 
-    // @RequestParam ： 從url的請求參數
-    // ProductCategory category ： 前端可以透過傳進來的 category 的值，知道要查看哪一類商品
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getProducts(
             // 查詢條件 Filtering
@@ -29,13 +31,19 @@ public class ProductController {
 
             // 排序 Sorting
             @RequestParam(defaultValue = "created_date") String orderBy,
-            @RequestParam(defaultValue = "desc") String sort
+            @RequestParam(defaultValue = "desc") String sort,
+
+            // 分頁 Pagination
+            @RequestParam(defaultValue = "5") @Max(1000) @Min(0) Integer limit,
+            @RequestParam(defaultValue = "0") @Min(0) Integer offset
     ) {
         ProductQueryParams productQueryParams = new ProductQueryParams();
         productQueryParams.setCategory(category);
         productQueryParams.setSearch(search);
         productQueryParams.setOrderBy(orderBy);
         productQueryParams.setSort(sort);
+        productQueryParams.setLimit(limit);
+        productQueryParams.setOffset(offset);
 
         List<Product> productList = productService.getProducts(productQueryParams);
 
