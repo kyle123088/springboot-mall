@@ -1,5 +1,6 @@
 package com.kyle.springbootmall.controller;
 
+import com.kyle.springbootmall.constant.ProductCategory;
 import com.kyle.springbootmall.dto.ProductRequest;
 import com.kyle.springbootmall.model.Product;
 import com.kyle.springbootmall.service.ProductService;
@@ -17,9 +18,14 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    // @RequestParam ： 從url的請求參數
+    // ProductCategory category ： 前端可以透過傳進來的 category 的值，知道要查看哪一類商品
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts() {
-        List<Product> productList = productService.getProducts();
+    public ResponseEntity<List<Product>> getProducts(
+            @RequestParam(required = false) ProductCategory category,
+            @RequestParam(required = false) String search
+    ) {
+        List<Product> productList = productService.getProducts(category, search);
 
         return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
