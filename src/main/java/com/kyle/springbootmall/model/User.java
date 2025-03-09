@@ -1,12 +1,18 @@
 package com.kyle.springbootmall.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 
 public class User {
 
     private Integer userId;
     private String email;
+
+    // 隱藏變數，轉換 User object 為 json 會去忽略 password 變數
+    @JsonIgnore
     private String password;
+
     private Date createdDate;
     private Date lastModifiedDate;
 
