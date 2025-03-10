@@ -1,6 +1,7 @@
 package com.kyle.springbootmall.controller;
 
 import com.kyle.springbootmall.dto.CreateOrderRequest;
+import com.kyle.springbootmall.model.Order;
 import com.kyle.springbootmall.service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,10 @@ public class OrderController {
         // 預期 orderService 會提供一個 createOrder 方法，會返回一個 orderId
         Integer orderId = orderService.createOrder(userId, createOrderRequest);
 
+        // 取得 orderId 後，將訂單回傳給前端
+        Order order = orderService.getOrderById(orderId);
+
         // 返回給前端 orederId
-        return ResponseEntity.status(HttpStatus.CREATED).body(orderId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
 }

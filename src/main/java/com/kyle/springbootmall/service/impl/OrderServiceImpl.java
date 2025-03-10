@@ -4,6 +4,7 @@ import com.kyle.springbootmall.dao.OrderDao;
 import com.kyle.springbootmall.dao.ProductDao;
 import com.kyle.springbootmall.dto.BuyItem;
 import com.kyle.springbootmall.dto.CreateOrderRequest;
+import com.kyle.springbootmall.model.Order;
 import com.kyle.springbootmall.model.OrderItem;
 import com.kyle.springbootmall.model.Product;
 import com.kyle.springbootmall.service.OrderService;
@@ -21,6 +22,16 @@ public class OrderServiceImpl implements OrderService {
     private OrderDao orderDao;
     @Autowired
     private ProductDao productDao;
+
+    @Override
+    public Order getOrderById(Integer orderId) {
+
+        Order order = orderDao.getOrderById(orderId);
+        List<OrderItem> orderItemList = orderDao.getOrderByOrderId(orderId);
+
+        order.setOrderItemList(orderItemList);
+        return order;
+    }
 
     // 這邊加 @Transactional 是確保兩個資料庫的操作
     // 例如：order table 新增成功， order_item table 新增失敗的情況
