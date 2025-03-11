@@ -5,6 +5,7 @@ import com.kyle.springbootmall.dao.ProductDao;
 import com.kyle.springbootmall.dao.UserDao;
 import com.kyle.springbootmall.dto.BuyItem;
 import com.kyle.springbootmall.dto.CreateOrderRequest;
+import com.kyle.springbootmall.dto.OrderQueryParams;
 import com.kyle.springbootmall.model.Order;
 import com.kyle.springbootmall.model.OrderItem;
 import com.kyle.springbootmall.model.Product;
@@ -34,10 +35,29 @@ public class OrderServiceImpl implements OrderService {
     private UserDao userDao;
 
     @Override
+    public Integer countOrder(OrderQueryParams orderQueryParams) {
+        return orderDao.countOrder(orderQueryParams);
+    }
+
+    @Override
+    public List<Order> getOrders(OrderQueryParams orderQueryParams) {
+
+        List<Order> orderList = orderDao.getOrders(orderQueryParams);
+
+        for (Order order : orderList) {
+            List<OrderItem> orderItemList = orderDao.getOrderItemsByOrderId(order.getOrderId());
+
+            order.setOrderItemList(orderItemList);
+        }
+
+        return orderList;
+    }
+
+    @Override
     public Order getOrderById(Integer orderId) {
 
         Order order = orderDao.getOrderById(orderId);
-        List<OrderItem> orderItemList = orderDao.getOrderByOrderId(orderId);
+        List<OrderItem> orderItemList = orderDao.getOrderItemsByOrderId(orderId);
 
         order.setOrderItemList(orderItemList);
         return order;
